@@ -1,0 +1,57 @@
+<div id="chat-view"
+    data-id="chat-view"
+    data-role="view"
+    data-show="app.chat.init" 
+    data-layout="main-layout"
+    data-title="Chat">
+    
+    <div id="chat">
+        <ul data-bind="source: messages", data-template="message-template"></ul>   
+        <div id="input-area">
+            <input type="text" data-bind="value: messageText" />
+            <button data-bind="click: postMessage">Send</button>
+            <button data-bind="click: goToSessionView">Back</button>
+        </div>        
+    </div>
+</div>
+
+
+
+<style>
+    #chat ul{
+        list-style-type: none;
+    }
+    #chat li {
+        overflow: hidden;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid;
+    }
+    
+     #chat img {
+        float: left;
+    }
+    #chat h2 {
+        font-size: 14px;
+    }
+    
+    #chat{
+        height: 300px;
+    }
+    #input-area {
+
+        height: 142px
+    }
+    
+    #chat p {
+       font-weight: normal;
+       margin-right: 0;
+    }
+</style>
+
+<script id="message-template" type="text/x-kendo-template">
+    <li>
+        <img data-bind="attr: {src: CreatedBy.ImageSrc}" width="40" height="40"/>
+        <h2 data-bind="text : CreatedBy.DisplayName"></h2>
+        <p data-bind="text: Content"></p>
+    </li>
+</script>

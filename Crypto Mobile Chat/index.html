@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta charset="utf-8" />
+        <link href="kendo/styles/kendo.mobile.all.min.css" rel="stylesheet" />
+        <link href="styles/main.css" rel="stylesheet" />
+
+        <script src="cordova.js"></script>
+        <script src="kendo/js/jquery.min.js"></script>
+        <script src="kendo/js/kendo.mobile.min.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
+        <script src="scripts/libraries/rsvp.min.js"></script>
+        <script src="scripts/libraries/everlive.all.min.js"></script>
+        <script src="scripts/app/http-requester.js"></script>
+        <script src="scripts/app/all-users.js"></script>
+        <script src="scripts/app/login.js"></script>
+        <script src="scripts/app/no-internet.js"></script>
+        <script src="scripts/app/register.js"></script>
+        <script src="scripts/app/profile.js"></script>
+        <script src="scripts/app/chat.js"></script>
+        <script src="scripts/app/app.js"></script>
+        <script src="scripts/app/sessions.js"></script>
+
+    </head>
+    <body>       
+        <div
+            id="login-view"
+            data-id="login-view"
+            data-role="view"
+            data-show="app.login.init"
+            data-layout="entry-layout"
+            data-title="Login"
+            >            
+            <div class="view-content">
+                <h3>Enter your credentials:</h3>
+
+                <ul data-role="listview" data-style="inset">
+                    <li>
+                        <label>
+                            Username
+                            <input type="text" data-bind="value: username"/>
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            Password
+                            <input type="password" data-bind="value: password" />
+                        </label>
+                    </li>
+                </ul>
+                <input type="checkBox" value = "Remember me?" />
+                <div class="system-message">
+                    <p data-bind="text: systemMessage"></p>
+                </div>
+                
+                <div class="buttonArea">
+                    <a id="login" data-role="button" data-bind="click: onLogin" class="entry-button">Login</a>
+                </div>  
+            </div>
+        </div>
+        
+        <div
+            id="register-view"
+            data-id="register-view"
+            data-role="view"
+            data-show="app.register.init"
+            data-layout="entry-layout"
+            data-title="Register"
+            >            
+            <div class="view-content">
+                <h3>Enter your credentials:</h3>
+
+                <ul data-role="listview" data-style="inset">
+                    <li>
+                        <label>
+                            Username
+                            <input type="text" data-bind="value: username"/>
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            Nickname
+                            <input type="text" data-bind="value: nickname"/>
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            Email
+                            <input type="text" data-bind="value: email" />
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            Password
+                            <input type="password" data-bind="value: password" />
+                        </label>
+                    </li>
+                </ul>
+                <div>
+                    <p class="system-message" data-bind="text: systemMessage"></p>
+                </div>
+                <div class="buttonArea">
+                    <a id="register" data-role="button" data-bind="click: onRegister" class="entry-button">Register</a>
+                </div>                
+                            
+            </div>
+        </div>
+        
+        <div data-role="layout" id="main-layout" data-id="main-layout">
+            <header data-role="header">
+                <div data-role="navbar">
+                    <span data-role="view-title"></span>
+                </div>
+            </header>
+        </div> 
+        
+        <div data-role="layout" id="chat-layout" data-id="chat-layout">
+            <header data-role="header">
+                <div data-role="navbar">
+                    <span data-role="view-title"></span>
+                </div>
+            </header>
+            <footer data-role="footer">
+                    <div data-role="tabstrip">
+                        <a href="views/profile-view.html#profile-view" >Profile</a>
+                        <a href="views/all-users-view.html#all-users-view" >All Users</a>
+                        <a href="views/sessions-view.html#sessions-view" >Sessions</a>
+                    </div>
+            </footer> 
+        </div> 
+        
+        <div data-role="layout" id="entry-layout" data-id="entry-layout">
+            <header data-role="header">
+                <div data-role="navbar">
+                    <span data-role="view-title"></span>
+                </div>
+            </header>
+            <footer data-role="footer">
+                    <div data-role="tabstrip">
+                        <a href="#login-view" >Login</a>
+                        <a href="#register-view" >Register</a>
+                    </div>
+            </footer> 
+        </div> 
+        
+        
+    </body>
+</html>

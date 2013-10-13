@@ -1,0 +1,40 @@
+<div
+    id="profile-view"
+    data-id="profile-view"
+    data-role="view"
+    data-show="app.profile.init" 
+    data-layout="chat-layout"
+    data-title="Profile">
+    
+    <div id="profile">
+        <img data-bind="attr: { src: imageSrc }" />
+        <h2 data-bind="text: username"></h2>
+        <button>Change image</button>
+     </div>
+</div>
+
+<style>
+    #profile{
+        margin-top: 1rem;
+        margin-right: 1rem;
+        margin-left: 1rem;
+        padding-bottom: 1rem;
+        border-radius: 5px;
+        border: 1px solid;
+        overflow: hidden;
+
+            }
+    #profile h2 {
+        margin-left: 7rem;
+    }
+    #profile img {
+        float: left;
+        margin-left: 0.3rem;
+        margin-top: 0.4rem;
+    }
+    #profile button {
+       border: none;
+       color: green;     
+    }
+   
+</style>

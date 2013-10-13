@@ -1,0 +1,37 @@
+<div id="all-users-view"
+    data-id="all-users-view"
+    data-role="view"
+    data-show="app.allUsers.init" 
+    data-layout="chat-layout"
+    data-title="All Users">
+    <div id="users-info">
+        <ul data-bind="source: users" data-template="user-template"></ul>
+    </div>
+</div>
+
+<script id="user-template" type="text/x-kendo-template">
+    <li>
+        <img data-bind="attr: {src: ImageSrc}" />
+        <h2 data-bind="text : DisplayName"></h2>
+        <button data-bind="click: startNewSession">Chat</button>
+    </li>
+</script>
+
+<style>
+    #users-info ul {
+        list-style-type: none
+    }
+    #users-info li {
+        overflow: hidden;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid;
+    }
+    
+     #users-info img {
+        float: left;
+    }
+    #users-info h2 {
+        float: left;
+        font-size: 14px;
+    }
+</style>

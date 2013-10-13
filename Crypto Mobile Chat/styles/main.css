@@ -12,6 +12,11 @@ body, html {
 .view-content h1.welcome{
     text-align:center;
 }
+
+.system-message {
+    color: red;
+}
+
 .view-content h3{
     color:#42454a;
     font-size:1.1em;
@@ -42,7 +47,7 @@ body, html {
 .buttonArea {
     text-align: center;
 }
-.login-button {
+.entry-button {
     width:85%;
     max-width:300px;
     line-height:1.6em;
