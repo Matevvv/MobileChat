@@ -13,10 +13,11 @@ var app = app || {};
         httpRequester.getJson(a.baseUrl + "users").then(
             function(successData){
                 var usersData = successData.Result;
-                for (var i in usersData)
+                for (var i = 0; i < usersData.length; i++)
                 {
                     if (usersData[i].Username == a.currentUser.username){
-                        usersData.splice(i, 1)
+                        usersData.splice(i, 1);
+                        i--;
                     }
                     else {
                         if(usersData[i].Image){
@@ -35,10 +36,21 @@ var app = app || {};
     
     function startNewSession(e) {
         
+        var userSessions = a.currentUser.sessions;
+         for(var i in userSessions){
+            userSessions[i].AddedUsers = userSessions[i].AddedUsers || [];
+            if (userSessions[i].AddedUsers.Id == e.data.Id || userSessions[i].CreatedBy == e.data.Id){
+                a.currentUser.currentSessionId = i;
+                a.application.navigate("views/chat-view.html#chat-view");
+                return;
+            }
+        } 
+        
         var usersData = {
             AddedUsers: {
                 Id: e.data.Id,
-                DisplayName: e.data.DisplayName
+                DisplayName: e.data.DisplayName,
+                Position: e.data.Position
             }
         }
         
@@ -46,7 +58,12 @@ var app = app || {};
         sessions.create(usersData).then(
             function(successData){
                 var newSession = successData.result;
+                newSession.AddedUsers = usersData.AddedUsers;
+                newSession.ChatBuddy = usersData.AddedUsers;
+                newSession.CreatedBy = a.currentUser.id;
+                Everlive.$.data("Invitations").create({InvitedUser: e.data.Id, Session: newSession.Id});
                 a.currentUser.sessions[newSession.Id] = newSession;
+                a.dataPersister.keepCheckingForNewMessages(newSession.Id)
                 a.currentUser.currentSessionId = newSession.Id;
                 a.application.navigate("views/chat-view.html#chat-view");
             }

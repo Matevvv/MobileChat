@@ -24,31 +24,33 @@ var app = app || {};
         }
         viewModel.set("messages", currentSession.Messages);
         
-        a.dataPersister.checkForMessages = setInterval(function(){
-            sessions.getById(sessionId).then(function(successData){
-                var sessionData = successData.result;
-                if (sessionData.Messages) {
-                    for (var i in sessionData.Messages){
-                        if (sessionData.Messages[i].CreatedOn > lastSentMessage){
-                            viewModel.get("messages").push(sessionData.Messages[i]);
-                            lastSentMessage = sessionData.Messages[i].CreatedOn;
-                        }                      
-                    }                   
-                }
-            });
-        }, 1000);
+        var checkForMessages = setInterval(function(){
+            var currentMessages = currentSession.Messages;
+            for (var i in currentMessages) {
+                if (currentMessages[i].CreatedOn > lastSentMessage) {
+                    viewModel.get("messages").push(currentMessages[i]);
+                    lastSentMessage = currentMessages[i].CreatedOn;
+                }           
+            }
+        }, 2000);
 
     }
     
     var sessionId;
     var lastSentMessage = new Date(1900, 9, 9);
-    
+    var currentSession;
     
     function goToSessionView(){
+
         a.application.navigate("views/sessions-view.html#sessions-view");
         clearInterval(a.dataPersister.checkForMessages);
     }
     function postMessage() {
+        var text = viewModel.get("messageText");
+        if (text.length == 0)
+        {
+            return;
+        }
         var newMessage = {
             Content: viewModel.get("messageText"),
             CreatedBy: {

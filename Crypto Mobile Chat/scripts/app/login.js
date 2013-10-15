@@ -23,20 +23,25 @@ var app = app || {};
             grant_type: "password"
         }
         
+        
         httpRequester.postJson(app.baseUrl + "oauth/token", userLoginData).then(
-            function(successData) {                               
+            function(successData) { 
                 var userData = successData.Result;
                 a.currentUser.accessToken = userData.access_token;
+                
+                a.el.setup.token = a.currentUser.accessToken;
                 a.currentUser.id = userData.principal_id;               
                 a.currentUser.authHeader = {
                     Authorization : a.currentUser.accessToken
                 };
+                
                 a.currentUser.addNewSession = function (newSessionId){
-                    Everlive.$.data("Invitations").getById(newSessionId).then(function(successData){
+                    Everlive.$.data("Sessions").getById(newSessionId).then(function(successData){
                         a.currentUser.sessions[newSessionId] = successData.result;
                         a.dataPersister.keepCheckingForNewMessages(newSessionId)
                     });
                 }
+                
                 var serviceUrl = app.baseUrl + "users/" + a.currentUser.id;
                 httpRequester.getJson(serviceUrl, a.currentUser.authHeader).then(
                     function(successData){
@@ -63,8 +68,28 @@ var app = app || {};
             for (var i in invitationData){
                 if (invitationData[i].InvitedUser == app.currentUser.id){
                     var newSessionId = invitationData[i].Session;
-                    invitations.destroySingle(invitationData[i].Id);
-                    a.currentUser.addNewSession(newSessionId);
+                    var createdBy = invitationData[i].CreatedBy;
+                    invitations.destroySingle({Id : invitationData[i].Id});
+                    a.currentUser.currentSessionId = newSessionId;
+                    
+                    Everlive.$.data("Sessions").getById(newSessionId).then(function(successData){
+                        a.currentUser.sessions[newSessionId] = successData.result;
+                        a.currentUser.sessions[newSessionId].CreatedBy = createdBy;
+                        
+                        Everlive.$.data("Users").getById(createdBy).then(function(successData){
+                            var user = successData.result;
+                            a.currentUser.sessions[newSessionId].ChatBuddy = {
+                                Id: user.Id,
+                                DisplayName: user.DisplayName,
+                                Position: user.Position
+                            };
+                        });
+                        
+                        a.dataPersister.keepCheckingForNewMessages(newSessionId)
+                        a.application.navigate("views/chat-view.html#chat-view")
+                        navigator.notification.vibrate(milliseconds);
+                    });
+
                 }
             }
         });
@@ -81,7 +106,7 @@ var app = app || {};
     function checkForNewMessage(newSessionId) {
         Everlive.$.data("Sessions").getById(newSessionId).then(function(successData){
             var sessionData = successData.result;
-            if (sessionData.Messages && sessionData.Messages.length > a.currentUser.sessions[newSessionId].length){
+            if (sessionData.Messages && sessionData.Messages.length > a.currentUser.sessions[newSessionId].Messages.length){
                 a.currentUser.sessions[newSessionId].Messages = sessionData.Messages;
             }
         })
@@ -89,14 +114,14 @@ var app = app || {};
     
     function setUserDetails(userDetails) {
         a.currentUser.displayName = userDetails.DisplayName
-        a.currentUser.username = userDetails.Username;
-        
-        if(userDetails.Image) {
-            a.currentUser.imageSrc = a.baseUrl + "Files/" + userDetails.Image + "/Download";
-        }
-        else {
-            a.currentUser.imageSrc = "styles/images/no-avatar.jpg";
-        }       
+        a.currentUser.username = userDetails.Username; 
+        navigator.geolocation.getCurrentPosition(function(position){
+            var longitude = parseFloat(position.coords.longitude);
+            var latitude = parseFloat(position.coords.latitude);
+            
+            var evPosition = new Everlive.GeoPoint(longitude, latitude);
+            Everlive.$.data("Users").updateSingle({Id: a.currentUser.id, Position: evPosition });
+        });
     }
     
     a.login = {

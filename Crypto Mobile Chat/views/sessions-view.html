@@ -4,11 +4,56 @@
     data-show="app.sessions.init" 
     data-layout="chat-layout"
     data-title="Sessions">
-    <div id="users-info">
+    <div id="sessions">
         <ul data-bind="source: sessions" data-template="sessions-template"></ul>
     </div>
 </div>
 
 <script id="sessions-template" type="text/x-kendo-template">
-    
+    <li>
+        <h2 data-bind="text: ChatBuddy.DisplayName"></h2>
+        <span data-bind="text: UnreadMessages"></span>
+        <button id="chat-btn" data-bind="click: goToChat">Go</button>
+        <button id="position-btn" data-bind="click: goToPosition">Position</button>
+    </li>
 </script>
+
+<style>
+    
+    #sessions ul {
+        list-style-type: none;
+        width: 16rem;
+        overflow: hidden;
+    }
+    
+    #position-btn {
+        padding-top: 4px;
+        padding-bottom: 4px;
+        background: black;
+        border: none;
+        color: white;
+        margin-bottom: 3px;
+    }
+    
+    #chat-btn {
+        background: red;
+        height: 39px;
+        font-size: 23px;
+        width: 50px;
+        border: none;
+        color: whitesmoke;
+    }
+    
+    #sessions li {
+        background: green;
+        float: left;
+        margin-bottom: 5px;
+        color: whitesmoke;
+        position: relative
+    }
+    
+    #sessions h2 {
+        float: left;
+        font-size: 14px;
+    }
+</style>
